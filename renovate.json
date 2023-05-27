@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "helpers:pinGitHubActionDigests",
+    ":disableDependencyDashboard"
+  ],
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": [
+    {
+        "automerge": true,
+        "automergeType": "branch",
+        "automergeSchedule": [
+            "before 3:00am"
+        ],
+        "groupName": "auto-update",
+        "managers": [
+            "pre-commit",
+            "github-actions"
+        ],
+        "matchUpdateTypes": [
+            "minor",
+            "patch",
+            "pin",
+            "digest"
+        ]
+    }
+  ],
+  "pre-commit": {
+    "enabled": true
+  },
+  "prConcurrentLimit": 3,
+  "recreateClosed": true,
+  "vulnerabilityAlerts": {
+    "labels": [
+        "security"
+    ]
+  }
+}

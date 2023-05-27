@@ -1,0 +1,40 @@
+name: Publish Release
+
+on:
+   push:
+     branches:
+       - main
+     paths:
+       - 'modules/**'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.CI_GITHUB_TOKEN }}
+
+      - name: Update changelog
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@latest
+        with:
+          github-token: ${{ secrets.CI_GITHUB_TOKEN }}
+          git-user-name: my-user
+          git-user-email: my-user@example.com
+          release-count: 0
+          skip-tag: true
+          skip-version-file: true
+
+      - name: create release
+        uses: actions/create-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false'}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}

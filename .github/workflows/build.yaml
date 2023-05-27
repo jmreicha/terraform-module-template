@@ -1,0 +1,67 @@
+name: checks
+on:
+  pull_request:
+jobs:
+  lint:
+    name: lints and checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ inputs.TERRAFORM_VERSION }}
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Validate Terraform configuration
+        uses: devops-infra/action-terraform-validate@v0.3
+
+      - name: Cache plugin dir
+        uses: actions/cache@v3
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+
+      # tflint
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v3
+        with:
+          tflint_version: v0.44.1
+
+      - name: Init TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        run: tflint -f compact
+
+      # trivy
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          exit-code: '1'
+          hide-progress: false
+          ignore-unfixed: true
+          scan-type: 'config'
+          severity: 'CRITICAL,HIGH'
+
+      # tfdocs
+
+      - name: Render terraform docs inside the README.md and push changes back to PR branch
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          args: --hide-empty=true
+          git-push: "true"
+          recursive: true
+          recursive-path: .
+          working-dir: modules/
