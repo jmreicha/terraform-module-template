@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: terraform-module-template
+  description: Terraform template module repo
+  tags:
+    - infra
+  annotations:
+    jira/project-key: EXAMPLE
+    github.com/project-slug: my-org/terraform-module-template
+    github.com/team-slug: my-team
+spec:
+  type: service
+  lifecycle: production
+  owner: my-team
