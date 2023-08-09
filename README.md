@@ -8,8 +8,12 @@ Some of these batteries include:
 - [pre-commit](https://pre-commit.com/) configs for linting and fixing errors.
 - [GitHub action](https://github.com/terraform-linters/setup-tflint) for linting and fixing errors.
 - [GitHub action](https://github.com/TriPSs/conventional-changelog-action) for automatically creating releases and changelogs.
+- [GitHub action](https://github.com/terraform-docs/gh-actions) for automatic Terraform doc generation.
+- [GitHub action](https://github.com/aquasecurity/trivy-action) for Terraform code scanning.
 - [Repo settings](https://github.com/apps/settings) config for managing settings with code.
 - [Renovate config](https://docs.renovatebot.com/) for keeping pre-commit and actions configs up to date automatically.
+
+Note: You may need to [update workflow permissions](https://github.com/orgs/community/discussions/56704) to allow `Read and write permissions` in order for changelog and tfdocs actions to write to the repo.
 
 ## Creating a new Terraform Module
 
