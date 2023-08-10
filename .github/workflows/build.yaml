@@ -65,3 +65,11 @@ jobs:
           recursive: true
           recursive-path: .
           working-dir: modules/
+    
+      # actionlint
+    
+      - name: Check workflow files
+        run: |
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -color
+        shell: bash
