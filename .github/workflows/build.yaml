@@ -13,6 +13,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
+          # Pass a custom CI token here so that we can trigger another build after updating the docs
+          token: ${{ secrets.CI_GITHUB_TOKEN }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
