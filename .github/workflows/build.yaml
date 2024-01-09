@@ -1,9 +1,12 @@
+---
 name: checks
+
 on:
   push:
     paths:
       - 'modules/**.md'
   pull_request:
+
 jobs:
   lint:
     name: lints and checks
@@ -47,7 +50,7 @@ jobs:
         run: tflint --init
 
       - name: Run TFLint
-        run: tflint -f compact
+        run: tflint -f compact -c $(git rev-parse --show-toplevel)/.tflint.hcl
 
       # trivy
 
@@ -70,9 +73,9 @@ jobs:
           recursive: true
           recursive-path: .
           working-dir: modules/
-    
+
       # actionlint
-    
+
       - name: Check workflow files
         run: |
           bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
