@@ -18,7 +18,8 @@
         "groupName": "auto-update",
         "managers": [
             "pre-commit",
-            "github-actions"
+            "github-actions",
+            "tflint-plugin"
         ],
         "matchUpdateTypes": [
             "minor",
